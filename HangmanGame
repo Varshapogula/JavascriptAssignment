@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hangman Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        .hangman-container {
+            margin-top: 50px;
+        }
+        .word-container {
+            margin-bottom: 20px;
+        }
+        .letter {
+            display: inline-block;
+            margin: 0 5px;
+        }
+        .letter input {
+            width: 30px;
+            text-align: center;
+            font-size: 20px;
+        }
+        .btn {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .btn:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <h1>Hangman Game</h1>
+    <div class="hangman-container">
+        <div class="word-container"></div>
+        <div class="letter-input">
+            <input type="text" maxlength="1" id="guessInput">
+            <button class="btn" onclick="checkLetter()">Guess</button>
+        </div>
+        <div class="message" id="message"></div>
+    </div>
+    <script>
+        const words = ["hangman", "javascript", "html", "css", "programming", "computer"];
+        let selectedWord = words[Math.floor(Math.random() * words.length)];
+        let guessedLetters = [];
+        let wordDisplay = selectedWord.replace(/\w/g, "_");
+        function displayWord() {
+            const wordContainer = document.querySelector('.word-container');
+            wordContainer.innerHTML = "";
+            for (let i = 0; i < wordDisplay.length; i++) {
+                wordContainer.innerHTML += `<span class="letter">${wordDisplay[i]}</span>`;
+            }
+        }
+
+        function checkLetter() {
+            const guessInput = document.getElementById('guessInput');
+            const guess = guessInput.value.toLowerCase();
+
+            if (guess.length !== 1 || !/[a-z]/.test(guess)) {
+                document.getElementById('message').innerText = "Please enter a valid letter!";
+                return;
+            }
+
+            if (guessedLetters.includes(guess)) {
+                document.getElementById('message').innerText = "You already guessed that letter!";
+                return;
+            }
+
+            guessedLetters.push(guess);
+
+            let correctGuess = false;
+            for (let i = 0; i < selectedWord.length; i++) {
+                if (selectedWord[i] === guess) {
+                    wordDisplay = wordDisplay.substr(0, i) + guess + wordDisplay.substr(i + 1);
+                    correctGuess = true;
+                }
+            }
+
+            if (correctGuess) {
+                document.getElementById('message').innerText = "Correct guess!";
+            } else {
+                document.getElementById('message').innerText = "Incorrect guess!";
+            }
+
+            displayWord();
+            if (wordDisplay === selectedWord) {
+                document.getElementById('message').innerText = "Congratulations! You guessed the word!";
+            }
+
+            guessInput.value = "";
+        }
+
+        displayWord();
+    </script>
+</body>
+</html>
