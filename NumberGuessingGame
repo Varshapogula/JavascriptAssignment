@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Number Guessing Game</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        text-align: center;
+    }
+    #result {
+        font-size: 20px;
+        margin-top: 20px;
+    }
+</style>
+</head>
+<body>
+<h1>Number Guessing Game</h1>
+<p>Guess a number between 1 and 100:</p>
+<input type="number" id="guessInput">
+<button onclick="checkGuess()">Submit Guess</button>
+<p id="result"></p>
+
+<script>
+    const randomNumber = Math.floor(Math.random() * 100) + 1;
+    let attempts = 0;
+
+    function checkGuess() {
+        const guess = parseInt(document.getElementById('guessInput').value);
+        const result = document.getElementById('result');
+        attempts++;
+
+        if (isNaN(guess) || guess < 1 || guess > 100) {
+            result.textContent = 'Please enter a valid number between 1 and 100.';
+        } else if (guess === randomNumber) {
+            result.textContent = `Congratulations! You guessed the correct number (${randomNumber}) in ${attempts} attempts.`;
+            disableInputAndButton();
+        } else if (guess < randomNumber) {
+            result.textContent = 'Too low! Try again.';
+        } else {
+            result.textContent = 'Too high! Try again.';
+        }
+    }
+
+    function disableInputAndButton() {
+        document.getElementById('guessInput').disabled = true;
+        document.querySelector('button').disabled = true;
+    }
+</script>
+</body>
+</html>
